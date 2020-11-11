@@ -4,7 +4,8 @@
     {
         public Stage()
         {
-            this.Snake = new Snake();
+            var anyPosition = new Position(0, 0);
+            this.Snake = new Snake(anyPosition);
         }
 
         public Snake Snake { get; }
