@@ -37,5 +37,8 @@ namespace Snake
 
         private void MoveDown() =>
             this.Head = this.Head.WithY(this.Head.Y + 1);
+
+        public void Eat() =>
+            this.Length++;
     }
 }
