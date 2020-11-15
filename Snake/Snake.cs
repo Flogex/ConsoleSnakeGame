@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using static Snake.Direction;
 
 namespace Snake
 {
@@ -33,14 +32,7 @@ namespace Snake
 
         public Snake Move(Direction direction)
         {
-            var newHeadPosition = direction switch
-            {
-                Left => this.Head.WithX(this.Head.X - 1),
-                Right => this.Head.WithX(this.Head.X + 1),
-                Up => this.Head.WithY(this.Head.Y - 1),
-                Down => this.Head.WithY(this.Head.Y + 1),
-                _ => throw new NotSupportedException("Unknown direction")
-            };
+            var newHeadPosition = this.Head.AdjacentPosition(direction);
 
             var newBodyBuilder = _parts.ToBuilder();
             newBodyBuilder.RemoveAt(newBodyBuilder.Count - 1);

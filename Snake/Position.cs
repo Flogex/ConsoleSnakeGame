@@ -14,12 +14,6 @@ namespace Snake
 
         public int Y { get; }
 
-        public Position WithX(int newX) =>
-            new Position(newX, this.Y);
-
-        public Position WithY(int newY) =>
-            new Position(this.X, newY);
-
         public override bool Equals(object? obj) =>
             obj is Position position && Equals(position);
 
