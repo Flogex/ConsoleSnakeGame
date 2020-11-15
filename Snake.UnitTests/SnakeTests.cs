@@ -34,69 +34,6 @@ namespace Snake.UnitTests
             }
         }
 
-        public class WhenMovingSnakeWithoutTail
-        {
-            private readonly Snake _snake = new Snake(2, 2);
-
-            [Fact]
-            public void ToTheLeft_ThenXCoordinateOfHeadShouldBeDecreasedBy1()
-            {
-                _snake.Move(Direction.Left);
-
-                _snake.Head.X.Should().Be(1);
-                _snake.Head.Y.Should().Be(2);
-            }
-
-            [Fact]
-            public void ToTheRight_ThenXCoordinateOfHeadShouldBeIncreasedBy1()
-            {
-                _snake.Move(Direction.Right);
-
-                _snake.Head.X.Should().Be(3);
-                _snake.Head.Y.Should().Be(2);
-            }
-
-            [Fact]
-            public void Up_ThenYCoordinateOfHeadShouldBeDecreasedBy1()
-            {
-                _snake.Move(Direction.Up);
-
-                _snake.Head.Y.Should().Be(1);
-                _snake.Head.X.Should().Be(2);
-            }
-
-            [Fact]
-            public void Down_ThenYCoordinateOfHeadShouldBeIncreasedBy1()
-            {
-                _snake.Move(Direction.Down);
-
-                _snake.Head.Y.Should().Be(3);
-                _snake.Head.X.Should().Be(2);
-            }
-        }
-
-        public class WhenMovingSnakeWithTail
-        {
-            private readonly Snake _snake;
-
-            public WhenMovingSnakeWithTail()
-            {
-                _snake = new Snake(3, 3);
-                _snake.Move(Direction.Left);
-                _snake.Eat();
-            }
-
-            [Fact]
-            // \forall s \in Snakes:
-            //    s' = s.Move(Direction.Left)
-            //    s'.Body[1..] == s.Body[0..^2]
-            public void ThenAllElementsShouldMoveToPositionOfPredecessor()
-            {
-                _snake.Move(Direction.Left);
-                _snake.Body.Should().ContainInOrder(new Position(1, 3), new Position(2, 3));
-            }
-        }
-
         public class WhenEating
         {
             private static readonly Direction _anyDirection = Direction.Right;

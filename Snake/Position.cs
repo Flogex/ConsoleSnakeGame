@@ -34,5 +34,8 @@ namespace Snake
 
         public static bool operator !=(Position left, Position right) =>
             !(left == right);
+
+        public static implicit operator Position((int X, int Y) tuple) =>
+            new Position(tuple.X, tuple.Y);
     }
 }
