@@ -12,12 +12,14 @@ namespace Snake.UnitTests
         private static Stage CreateStage(
             IObservable<long> time = null,
             IObservable<Direction> directions = null,
+            int? stageSize = null,
             Position? initialPosition = null,
             Direction initialDirection = Right)
         {
             return new Stage(
                 time ?? Observable.Empty<long>(),
                 directions ?? Observable.Empty<Direction>(),
+                stageSize ?? 10,
                 initialPosition ?? (3, 3),
                 initialDirection);
         }
@@ -34,6 +36,13 @@ namespace Snake.UnitTests
         {
             var stage = CreateStage(initialPosition: (4, 2));
             stage.Snake.Head.Should().Be(new Position(4, 2));
+        }
+
+        [Fact]
+        public void WhenCreatingNewStage_BoundariesArePassed()
+        {
+            var stage = CreateStage(stageSize: 4);
+            stage.Boundaries.Should().Be(new Boundaries(4));
         }
 
         [Theory]
@@ -98,13 +107,32 @@ namespace Snake.UnitTests
         {
             var time = new Subject<long>();
             var directions = new Subject<Direction>();
-            var stage = CreateStage(time, directions, (5, 4), Down);
+            var stage = CreateStage(time: time, directions: directions, initialPosition: (5, 4), initialDirection: Down);
 
             time.OnNext(1);
             directions.OnNext(Left);
             time.OnNext(2);
 
             stage.Snake.Head.Should().Be(new Position(4, 5));
+        }
+
+        [Theory]
+        [InlineData(0, 0, 2, Up)]
+        [InlineData(1, 1, 2, Down)]
+        [InlineData(0, 0, 2, Left)]
+        [InlineData(1, 1, 2, Right)]
+        public void WhenSnakeMovesOffStage_GameShouldBeOver(int initialX, int initialY, int stageSize, Direction initialDirection)
+        {
+            var time = new Subject<long>();
+            var stage = CreateStage(
+                time: time,
+                stageSize: stageSize,
+                initialPosition: (initialX, initialY),
+                initialDirection: initialDirection);
+
+            time.OnNext(1);
+
+            stage.GameOver.Should().BeTrue();
         }
     }
 }
