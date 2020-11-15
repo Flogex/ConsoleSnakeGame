@@ -6,12 +6,6 @@ namespace Snake
     {
         public Position(int x, int y)
         {
-            if (x < 0)
-                throw new ArgumentException("X coordinate must be greater than zero.", nameof(x));
-
-            if (y < 0)
-                throw new ArgumentException("Y coordinate must be greater than zero.", nameof(y));
-
             this.X = x;
             this.Y = y;
         }
