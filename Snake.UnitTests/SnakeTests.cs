@@ -39,26 +39,37 @@ namespace Snake.UnitTests
             private static readonly Direction _anyDirection = Direction.Right;
 
             [Fact]
+            public void OperationShouldBeImmutable()
+            {
+                var initialSnake = new Snake(_anyPosition).Move(_anyDirection);
+                var initialBody = initialSnake.Body.ToArray();
+
+                var snakeAfterMovingAndEating = initialSnake.Eat();
+
+                initialSnake.Body.Should().Equal(initialBody);
+
+                snakeAfterMovingAndEating.Should().NotBe(initialSnake);
+            }
+
+            [Fact]
             public void AndSnakeHasNoTail_LengthOfSnakeShouldBe2()
             {
-                var snake = new Snake(_anyPosition);
-                snake.Move(_anyDirection);
-
-                snake.Eat();
-
-                snake.Length.Should().Be(2);
+                var snake = new Snake(_anyPosition).Move(_anyDirection);
+                var snakeAfterMeal = snake.Eat();
+                snakeAfterMeal.Length.Should().Be(2);
             }
 
             [Fact]
             public void AndSnakeHasLengthOf2_LengthOfSnakeShouldBe3()
             {
-                var snake = new Snake(_anyPosition);
-                snake.Move(_anyDirection);
-                snake.Eat();
+                var snake = new Snake(_anyPosition)
+                    .Move(_anyDirection)
+                    .Eat()
+                    .Move(_anyDirection);
 
-                snake.Eat();
+                var snakeAfterMeal = snake.Eat();
 
-                snake.Length.Should().Be(3);
+                snakeAfterMeal.Length.Should().Be(3);
             }
 
             [Theory]
@@ -66,10 +77,9 @@ namespace Snake.UnitTests
             [InlineData(2, 3)]
             public void NewTailElementShouldAppearOnPreviousPositionOfLastTailPart(int x, int y)
             {
-                var snake = new Snake(x, y);
-                snake.Move(Direction.Left);
-                snake.Eat();
-                snake.Body.Last().Should().Be(new Position(x, y));
+                var snake = new Snake(x, y).Move(_anyDirection);
+                var snakeAfterMeal = snake.Eat();
+                snakeAfterMeal.Body.Last().Should().Be(new Position(x, y));
             }
         }
     }

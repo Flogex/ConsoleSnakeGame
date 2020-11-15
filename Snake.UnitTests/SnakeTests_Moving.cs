@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Xunit;
@@ -8,42 +9,56 @@ namespace Snake.UnitTests
 {
     public class WhenMovingSnakeWithoutTail
     {
-        private readonly Snake _snake = new Snake(2, 2);
+        private static readonly Position _anyPosition = new Position(2, 2);
+        private static readonly Direction _anyDirection = Right;
+
+        [Fact]
+        public void OperationShouldBeImmutable()
+        {
+            var initialSnake = new Snake(_anyPosition);
+            var initialBody = initialSnake.Body.ToArray();
+
+            var snakeAfterMovingAndEating = initialSnake.Move(_anyDirection);
+
+            initialSnake.Body.Should().Equal(initialBody);
+
+            snakeAfterMovingAndEating.Should().NotBe(initialSnake);
+        }
 
         [Fact]
         public void ToTheLeft_ThenXCoordinateOfHeadShouldBeDecreasedBy1()
         {
-            _snake.Move(Left);
+            var snakeAfterMove = new Snake(2, 2).Move(Left);
 
-            _snake.Head.X.Should().Be(1);
-            _snake.Head.Y.Should().Be(2);
+            snakeAfterMove.Head.X.Should().Be(1);
+            snakeAfterMove.Head.Y.Should().Be(2);
         }
 
         [Fact]
         public void ToTheRight_ThenXCoordinateOfHeadShouldBeIncreasedBy1()
         {
-            _snake.Move(Right);
+            var snakeAfterMove = new Snake(2, 2).Move(Right);
 
-            _snake.Head.X.Should().Be(3);
-            _snake.Head.Y.Should().Be(2);
+            snakeAfterMove.Head.X.Should().Be(3);
+            snakeAfterMove.Head.Y.Should().Be(2);
         }
 
         [Fact]
         public void Up_ThenYCoordinateOfHeadShouldBeDecreasedBy1()
         {
-            _snake.Move(Up);
+            var snakeAfterMove = new Snake(2, 2).Move(Up);
 
-            _snake.Head.Y.Should().Be(1);
-            _snake.Head.X.Should().Be(2);
+            snakeAfterMove.Head.Y.Should().Be(1);
+            snakeAfterMove.Head.X.Should().Be(2);
         }
 
         [Fact]
         public void Down_ThenYCoordinateOfHeadShouldBeIncreasedBy1()
         {
-            _snake.Move(Down);
+            var snakeAfterMove = new Snake(2, 2).Move(Down);
 
-            _snake.Head.Y.Should().Be(3);
-            _snake.Head.X.Should().Be(2);
+            snakeAfterMove.Head.Y.Should().Be(3);
+            snakeAfterMove.Head.X.Should().Be(2);
         }
     }
 
@@ -63,18 +78,14 @@ namespace Snake.UnitTests
             Direction[] directions,
             Direction actDirection)
         {
-            var snake = new Snake(initialX, initialY);
+            var snakeBeforeMove = new Snake(initialX, initialY);
             foreach (var direction in directions)
-            {
-                snake.Move(direction);
-                snake.Eat();
-            }
+                snakeBeforeMove = snakeBeforeMove.Move(direction).Eat();
 
-            var bodyBeforeMove = snake.Body.ToArray();
+            var bodyBeforeMove = snakeBeforeMove.Body.ToArray();
 
-            snake.Move(actDirection);
-
-            var bodyAfterMove = snake.Body.ToArray();
+            var snakeAfterMove = snakeBeforeMove.Move(actDirection);
+            var bodyAfterMove = snakeAfterMove.Body.ToArray();
 
             bodyAfterMove[1..].Should().Equal(bodyBeforeMove[..^1]);
         }
@@ -86,14 +97,12 @@ namespace Snake.UnitTests
             Position[] expectedPartPositions)
         {
             // Parts of snake are initially at [(4, 6), (4, 5), (5, 5)]
-            var snake = new Snake(5, 5);
-            snake.Move(Left);
-            snake.Eat();
-            snake.Move(Down);
-            snake.Eat();
+            var snake = new Snake(5, 5)
+                .Move(Left).Eat()
+                .Move(Down).Eat();
 
             foreach (var direction in sequence)
-                snake.Move(direction);
+                snake = snake.Move(direction);
 
             snake.Body.Should().Equal(expectedPartPositions);
         }
@@ -131,18 +140,14 @@ namespace Snake.UnitTests
             Position[] expectedPartPositions)
         {
             // Parts of snake are initially at [(3, 7), (4, 7), (4, 6), (4, 5), (5, 5)]
-            var snake = new Snake(5, 5);
-            snake.Move(Left);
-            snake.Eat();
-            snake.Move(Down);
-            snake.Eat();
-            snake.Move(Down);
-            snake.Eat();
-            snake.Move(Left);
-            snake.Eat();
+            var snake = new Snake(5, 5)
+                .Move(Left).Eat()
+                .Move(Down).Eat()
+                .Move(Down).Eat()
+                .Move(Left).Eat();
 
             foreach (var direction in sequence)
-                snake.Move(direction);
+                snake = snake.Move(direction);
 
             snake.Body.Should().Equal(expectedPartPositions);
         }
