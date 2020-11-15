@@ -12,6 +12,40 @@ namespace Snake.UnitTests
         private static readonly Position _anyPosition = new Position(2, 2);
         private static readonly Direction _anyDirection = Right;
 
+        // ∀ s ∈ Snakes:
+        //    s == s.Move(Left).Move(Right)
+        //    s == s.Move(Up).Move(Down)
+        [Theory]
+        [InlineData(Left, Right)]
+        [InlineData(Up, Down)]
+        public void MovingInOneDirectionAndThenInOppositeOneShouldHaveNoEffect(Direction direction, Direction oppositeDirection)
+        {
+            var initialSnake = new Snake(_anyPosition);
+            var snakeAfterMove = initialSnake.Move(direction).Move(oppositeDirection);
+            snakeAfterMove.Should().Be(initialSnake);
+        }
+
+        // ∀ s ∈ Snakes ∀ d1, d2 ∈ Direction:
+        //     s.Length == 1 ⇒ s.Move(d1).Move(d2) == s.Move(d2).Move(d1);
+        [Theory]
+        [MemberData(nameof(GetDirectionCombinations))]
+        public void OperationShouldBeCommutative(Direction d1, Direction d2)
+        {
+            var initialSnake = new Snake(_anyPosition);
+
+            var snake1 = initialSnake.Move(d1).Move(d2);
+            var snake2 = initialSnake.Move(d2).Move(d1);
+
+            snake1.Should().Be(snake2);
+        }
+
+        public static IEnumerable<object[]> GetDirectionCombinations()
+        {
+            return Enum.GetValues<Direction>()
+                .CombineDistinctPairs()
+                .Select(p => new object[] { p.First, p.Second });
+        }
+
         [Fact]
         public void OperationShouldBeImmutable()
         {
@@ -64,9 +98,8 @@ namespace Snake.UnitTests
 
     public class WhenMovingSnake
     {
-        // ∀ s ∈ Snakes:
-        //    s' = s.Move(Any)
-        //    s'.Body[1..] == s.Body[0..^1]
+        // ∀ s ∈ Snakes ∀ d ∈ Direction:
+        //    s.Move(d).Body[1..] == s.Body[0..^1]
         [Theory]
         [InlineData(3, 3, new[] { Left }, Left)]
         [InlineData(1, 1, new[] { Right, Right }, Down)]

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using static Snake.Direction;
 
 namespace Snake
 {
-    public readonly struct Snake
+    public readonly struct Snake : IEquatable<Snake>
     {
         private readonly ImmutableList<Position> _parts;
         private readonly Position? _previousLastPartPosition;
@@ -56,5 +57,27 @@ namespace Snake
             var newBody = _parts.Add(_previousLastPartPosition.Value);
             return new Snake(newBody, null);
         }
+
+        public override bool Equals(object? obj) =>
+            obj is Snake snake && Equals(snake);
+
+        public bool Equals(Snake other) =>
+            this.Body.SequenceEqual(other.Body);
+
+        public override int GetHashCode()
+        {
+            var hashCode = new HashCode();
+
+            foreach (var part in _parts)
+                hashCode.Add(part);
+
+            return hashCode.ToHashCode();
+        }
+
+        public static bool operator ==(Snake left, Snake right) =>
+            left.Equals(right);
+
+        public static bool operator !=(Snake left, Snake right) =>
+            !(left == right);
     }
 }
