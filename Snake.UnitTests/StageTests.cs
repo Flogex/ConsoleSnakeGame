@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using FluentAssertions;
+using Snake.UnitTests.Fakes;
 using Xunit;
 using static Snake.Direction;
 
@@ -12,14 +13,16 @@ namespace Snake.UnitTests
         private static Stage CreateStage(
             IObservable<long> time = null,
             IObservable<Direction> directions = null,
-            int? stageSize = null,
+            IFoodPositioningService foodPositions = null,
+            int stageSize = 10,
             Position? initialPosition = null,
             Direction initialDirection = Right)
         {
             return new Stage(
                 time ?? Observable.Empty<long>(),
                 directions ?? Observable.Empty<Direction>(),
-                stageSize ?? 10,
+                foodPositions ?? new FakeFoodPositioningService((8, 8)),
+                stageSize,
                 initialPosition ?? (3, 3),
                 initialDirection);
         }
@@ -43,6 +46,15 @@ namespace Snake.UnitTests
         {
             var stage = CreateStage(stageSize: 4);
             stage.Boundaries.Should().Be(new Boundaries(4));
+        }
+
+        [Fact]
+        public void WhenCreatingNewStage_FoodShouldBeOnPositionProvidedByPositioningService()
+        {
+            var foodPositions = new FakeFoodPositioningService((3, 3));
+            var stage = CreateStage(foodPositions: foodPositions);
+
+            stage.CurrentFoodPosition.Should().Be(new Position(3, 3));
         }
 
         [Theory]
@@ -133,6 +145,94 @@ namespace Snake.UnitTests
             time.OnNext(1);
 
             stage.GameOver.Should().BeTrue();
+        }
+
+        [Fact]
+        public void WhenSnakeEatsFood_SnakeShouldGrow()
+        {
+            var time = new Subject<long>();
+            var foodPositions = new FakeFoodPositioningService((2, 3), (5, 2));
+            var stage = CreateStage(
+                time: time,
+                foodPositions: foodPositions,
+                initialPosition: (2, 2),
+                initialDirection: Down);
+
+            time.OnNext(1);
+
+            stage.Snake.Length.Should().Be(2);
+        }
+
+        [Fact]
+        public void WhenSnakeEatsFood_FoodShouldAppearAtNextPosition()
+        {
+            var time = new Subject<long>();
+            var foodPositions = new FakeFoodPositioningService((2, 3), (5, 2));
+            var stage = CreateStage(
+                time: time,
+                foodPositions: foodPositions,
+                initialPosition: (2, 2),
+                initialDirection: Down);
+
+            time.OnNext(1);
+
+            stage.CurrentFoodPosition.Should().Be(new Position(5, 2));
+        }
+
+        [Fact]
+        public void WhenSnakeEatsItself_GameShouldBeOver()
+        {
+            var time = new Subject<long>();
+            var directions = new Subject<Direction>();
+            var foodPositions = new FakeFoodPositioningService((0, 1), (0, 2), (1, 2), (1, 1), (9, 9));
+            var stage = CreateStage(
+                time: time,
+                directions: directions,
+                foodPositions: foodPositions,
+                initialPosition: (0, 0),
+                initialDirection: Down);
+
+            time.OnNext(1); // Eat food at (0, 1)
+            time.OnNext(2); // Eat food at (0, 2)
+            directions.OnNext(Right);
+            time.OnNext(3); // Eat food at (1, 2)
+            directions.OnNext(Up);
+            time.OnNext(4); // Eat food at (1, 1)
+            directions.OnNext(Left);
+            time.OnNext(5); // Eat tail
+
+            stage.GameOver.Should().BeTrue();
+        }
+
+        [Fact]
+        public void SnakeShouldBeAbleToMoveToCurrentPositionOfLastTailPart()
+        {
+            var time = new Subject<long>();
+            var directions = new Subject<Direction>();
+            var foodPositions = new FakeFoodPositioningService((0, 1), (1, 1), (1, 0), (9, 9));
+            var stage = CreateStage(
+                time: time,
+                directions: directions,
+                foodPositions: foodPositions,
+                initialPosition: (0, 0),
+                initialDirection: Down);
+
+            time.OnNext(1); // Eat food at (0, 1)
+            directions.OnNext(Right);
+            time.OnNext(3); // Eat food at (1, 1)
+            directions.OnNext(Up);
+            time.OnNext(4); // Eat food at (1, 0)
+
+            var partPositions1 = new Position[] { (1, 0), (1, 1), (0, 1), (0, 0) };
+            stage.Snake.Body.Should().Equal(partPositions1);
+
+            directions.OnNext(Left);
+            time.OnNext(5); // Snake head moves to (0, 0), but last tail part moves to (0, 1) simultaneously
+
+            var partPositions2 = new Position[] { (0, 0), (1, 0), (1, 1), (0, 1) };
+            stage.Snake.Body.Should().Equal(partPositions2);
+
+            stage.GameOver.Should().BeFalse();
         }
     }
 }
