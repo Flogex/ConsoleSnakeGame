@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Snake
 {
+    [DebuggerDisplay("({this.X}, {this.Y})")]
     public readonly struct Position : IEquatable<Position>
     {
         public Position(int x, int y)

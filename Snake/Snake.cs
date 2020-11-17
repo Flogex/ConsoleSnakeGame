@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Snake
 {
+    [DebuggerDisplay("Snake (Head: {this.Head}, Length: {this.Length})")]
     public readonly struct Snake : IEquatable<Snake>
     {
         private readonly ImmutableList<Position> _parts;
@@ -12,11 +14,7 @@ namespace Snake
 
         public Snake(int x, int y) : this(new Position(x, y)) { }
 
-        public Snake(Position initialHead)
-        {
-            _parts = ImmutableList.Create(initialHead);
-            _previousLastPartPosition = null;
-        }
+        public Snake(Position initialHead) : this(ImmutableList.Create(initialHead), null) { }
 
         private Snake(ImmutableList<Position> body, Position? previousLastPartPosition)
         {
