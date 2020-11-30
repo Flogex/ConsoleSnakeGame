@@ -1,86 +1,54 @@
-﻿using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Xunit;
+using static Snake.Direction;
 
 namespace Snake.UnitTests
 {
-    public class SnakeTests
+    public partial class SnakeTests
     {
         private static readonly Position _anyPosition = new Position(2, 2);
+        private static readonly Direction _anyDirection = Right;
 
-        public class WhenCreatingNewSnake
+        [Fact]
+        public void WhenTwoSnakesWithLength1HaveSameHeadPosition_TheyShouldBeEqual()
         {
-            [Theory]
-            [InlineData(1, 1)]
-            public void ThenHeadShouldBeAtGivenPosition(int x, int y)
-            {
-                var snake = new Snake(x, y);
-                snake.Head.X.Should().Be(x);
-                snake.Head.Y.Should().Be(y);
-            }
+            var snake1 = new Snake(3, 5);
+            var snake2 = new Snake(3, 5);
 
-            [Fact]
-            public void ThenBodyShouldContainHeadAsSingleElement()
-            {
-                var snake = new Snake(2, 2);
-                snake.Body.Should().ContainSingle(p => p == new Position(2, 2));
-            }
+            var areEqual = snake1 == snake2;
+            areEqual.Should().BeTrue();
 
-            [Fact]
-            public void ThenLengthShouldBe1()
-            {
-                var snake = new Snake(_anyPosition);
-                snake.Length.Should().Be(1);
-            }
+            var hashCode1 = snake1.GetHashCode();
+            var hashCode2 = snake2.GetHashCode();
+            hashCode1.Should().Be(hashCode2);
         }
 
-        public class WhenEating
+        [Fact]
+        public void WhenTwoSnakesWithLength1HaveDifferentHeadPosition_TheyShouldNotBeEqual()
         {
-            private static readonly Direction _anyDirection = Direction.Right;
+            var snake1 = new Snake(3, 5);
+            var snake2 = new Snake(3, 3);
 
-            [Fact]
-            public void OperationShouldBeImmutable()
-            {
-                var initialSnake = new Snake(_anyPosition).Move(_anyDirection);
-                var initialBody = initialSnake.Body.ToArray();
+            var areNotEqual = snake1 != snake2;
+            areNotEqual.Should().BeTrue();
 
-                var snakeAfterMovingAndEating = initialSnake.Eat();
+            var hashCode1 = snake1.GetHashCode();
+            var hashCode2 = snake2.GetHashCode();
+            hashCode1.Should().NotBe(hashCode2);
+        }
 
-                initialSnake.Body.Should().Equal(initialBody);
+        [Fact]
+        public void WhenSnakeBodiesAreAtSamePosition_ThenSnakesShouldBeEqual()
+        {
+            var snake1 = new Snake(3, 5).Move(Left).Eat().Move(Up).Move(Up).Eat().Move(Right);
+            var snake2 = new Snake(2, 4).Move(Up).Eat().Move(Right).Eat();
 
-                snakeAfterMovingAndEating.Should().NotBe(initialSnake);
-            }
+            var areEqual = snake1 == snake2;
+            areEqual.Should().BeTrue();
 
-            [Fact]
-            public void AndSnakeHasNoTail_LengthOfSnakeShouldBe2()
-            {
-                var snake = new Snake(_anyPosition).Move(_anyDirection);
-                var snakeAfterMeal = snake.Eat();
-                snakeAfterMeal.Length.Should().Be(2);
-            }
-
-            [Fact]
-            public void AndSnakeHasLengthOf2_LengthOfSnakeShouldBe3()
-            {
-                var snake = new Snake(_anyPosition)
-                    .Move(_anyDirection)
-                    .Eat()
-                    .Move(_anyDirection);
-
-                var snakeAfterMeal = snake.Eat();
-
-                snakeAfterMeal.Length.Should().Be(3);
-            }
-
-            [Theory]
-            [InlineData(2, 2)]
-            [InlineData(2, 3)]
-            public void NewTailElementShouldAppearOnPreviousPositionOfLastTailPart(int x, int y)
-            {
-                var snake = new Snake(x, y).Move(_anyDirection);
-                var snakeAfterMeal = snake.Eat();
-                snakeAfterMeal.Body.Last().Should().Be(new Position(x, y));
-            }
+            var hashCode1 = snake1.GetHashCode();
+            var hashCode2 = snake2.GetHashCode();
+            hashCode1.Should().Be(hashCode2);
         }
     }
 }

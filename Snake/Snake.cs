@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Snake
 {
-    [DebuggerDisplay("Snake (Head: {this.Head}, Length: {this.Length})")]
-    public readonly struct Snake : IEquatable<Snake>
+    public readonly partial struct Snake
     {
         private readonly ImmutableList<Position> _parts;
         private readonly Position? _previousLastPartPosition;
@@ -30,11 +27,12 @@ namespace Snake
 
         public Snake Move(Direction direction)
         {
-            var newHeadPosition = this.Head.AdjacentPosition(direction);
-
             var newBodyBuilder = _parts.ToBuilder();
-            newBodyBuilder.RemoveAt(newBodyBuilder.Count - 1);
+
+            var newHeadPosition = this.Head.AdjacentPosition(direction);
             newBodyBuilder.Insert(0, newHeadPosition);
+
+            newBodyBuilder.RemoveAt(newBodyBuilder.Count - 1);
 
             return new Snake(newBodyBuilder.ToImmutable(), _parts[^1]);
         }
@@ -47,27 +45,5 @@ namespace Snake
             var newBody = _parts.Add(_previousLastPartPosition.Value);
             return new Snake(newBody, null);
         }
-
-        public override bool Equals(object? obj) =>
-            obj is Snake snake && Equals(snake);
-
-        public bool Equals(Snake other) =>
-            this.Body.SequenceEqual(other.Body);
-
-        public override int GetHashCode()
-        {
-            var hashCode = new HashCode();
-
-            foreach (var part in _parts)
-                hashCode.Add(part);
-
-            return hashCode.ToHashCode();
-        }
-
-        public static bool operator ==(Snake left, Snake right) =>
-            left.Equals(right);
-
-        public static bool operator !=(Snake left, Snake right) =>
-            !(left == right);
     }
 }
