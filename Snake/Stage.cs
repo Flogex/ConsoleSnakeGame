@@ -14,18 +14,18 @@ namespace Snake
             IObservable<Direction> directionStream,
             IFoodPositioningService foodPositions, //TODO Food must be far enough from head, in bounds, not at position where tail is, reachable
             int size,
-            Position initialPosition,
+            Position initialSnakePosition,
             Direction initialDirection)
         {
-            this.Snake = new Snake(initialPosition);
+            this.Snake = new Snake(initialSnakePosition);
             this.Boundaries = new Boundaries(size);
             this.CurrentDirection = initialDirection;
 
             _foodPositions = foodPositions;
             this.CurrentFoodPosition = foodPositions.GetNextPosition(this.Boundaries, this.Snake);
 
-            _timeSubscription = HandleTime(time);
-            _directionStreamSubscription = HandleDirectionStream(directionStream);
+            _timeSubscription = time.Subscribe(_ => HandleTimeElapsed());
+            _directionStreamSubscription = directionStream.Subscribe(next => this.CurrentDirection = next);
         }
 
         public Snake Snake { get; private set; }
@@ -38,24 +38,21 @@ namespace Snake
 
         public bool GameOver { get; private set; }
 
-        private IDisposable HandleTime(IObservable<long> time)
+        private void HandleTimeElapsed()
         {
-            return time.Subscribe(_ =>
+            this.Snake = this.Snake.Move(this.CurrentDirection);
+
+            if (this.Boundaries.IsOutOfBounds(this.Snake.Head))
+                FinishGame();
+
+            if (this.Snake.Body.Skip(1).Contains(this.Snake.Head))
+                FinishGame();
+
+            if (this.Snake.Head == this.CurrentFoodPosition)
             {
-                this.Snake = this.Snake.Move(this.CurrentDirection);
-
-                if (this.Boundaries.IsOutOfBounds(this.Snake.Head))
-                    FinishGame();
-
-                if (this.Snake.Body.Skip(1).Contains(this.Snake.Head))
-                    FinishGame();
-
-                if (this.Snake.Head == this.CurrentFoodPosition)
-                {
-                    this.Snake = this.Snake.Eat();
-                    this.CurrentFoodPosition = _foodPositions.GetNextPosition(this.Boundaries, this.Snake);
-                }
-            });
+                this.Snake = this.Snake.Eat();
+                this.CurrentFoodPosition = _foodPositions.GetNextPosition(this.Boundaries, this.Snake);
+            }
         }
 
         private void FinishGame()
@@ -64,8 +61,5 @@ namespace Snake
             _timeSubscription.Dispose();
             _directionStreamSubscription.Dispose();
         }
-
-        private IDisposable HandleDirectionStream(IObservable<Direction> directionStream) =>
-            directionStream.Subscribe(next => this.CurrentDirection = next);
     }
 }

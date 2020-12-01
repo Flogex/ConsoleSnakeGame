@@ -8,7 +8,7 @@ using static Snake.Direction;
 
 namespace Snake.UnitTests
 {
-    public class StageTests
+    public partial class StageTests
     {
         private static Stage CreateStage(
             IObservable<long> time = null,
@@ -28,51 +28,10 @@ namespace Snake.UnitTests
         }
 
         [Fact]
-        public void WhenCreatingNewStage_ThenNewSnakeIsInitialized()
-        {
-            var stage = CreateStage();
-            stage.Snake.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void WhenCreatingNewStage_HeadOfSnakeShouldBeOnInitialPosition()
-        {
-            var stage = CreateStage(initialPosition: (4, 2));
-            stage.Snake.Head.Should().Be(new Position(4, 2));
-        }
-
-        [Fact]
-        public void WhenCreatingNewStage_BoundariesArePassed()
-        {
-            var stage = CreateStage(stageSize: 4);
-            stage.Boundaries.Should().Be(new Boundaries(4));
-        }
-
-        [Fact]
-        public void WhenCreatingNewStage_FoodShouldBeOnPositionProvidedByPositioningService()
-        {
-            var foodPositions = new FakeFoodPositioningService((3, 3));
-            var stage = CreateStage(foodPositions: foodPositions);
-
-            stage.CurrentFoodPosition.Should().Be(new Position(3, 3));
-        }
-
-        [Theory]
-        [InlineData(Left)]
-        [InlineData(Right)]
-        [InlineData(Up)]
-        [InlineData(Down)]
-        public void WhenCreatingNewStage_ThenCurrentDirectionShouldBeInitialDirection(Direction initialDirection)
-        {
-            var stage = CreateStage(initialDirection: initialDirection);
-            stage.CurrentDirection.Should().Be(initialDirection);
-        }
-
-        [Fact]
         public void WhenSendingNewDirection_CurrentDirectionShouldReflectUpdate()
         {
             var directions = new Subject<Direction>();
-            var stage = CreateStage(directions: directions);
+            var stage = CreateStage(directions: directions, initialDirection: Right);
 
             directions.OnNext(Up);
 
@@ -80,10 +39,10 @@ namespace Snake.UnitTests
         }
 
         [Fact]
-        public void WhenSendingMultipleNewDirection_CurrentDirectionShouldBeLastOneInStream()
+        public void WhenSendingMultipleNewDirections_CurrentDirectionShouldBeLastOneSent()
         {
             var directions = new Subject<Direction>();
-            var stage = CreateStage(directions: directions);
+            var stage = CreateStage(directions: directions, initialDirection: Right);
 
             directions.OnNext(Up);
             directions.OnNext(Down);
@@ -119,7 +78,8 @@ namespace Snake.UnitTests
         {
             var time = new Subject<long>();
             var directions = new Subject<Direction>();
-            var stage = CreateStage(time: time, directions: directions, initialPosition: (5, 4), initialDirection: Down);
+            var stage = CreateStage(time: time, directions: directions, initialPosition: (5, 4),
+                initialDirection: Down);
 
             time.OnNext(1);
             directions.OnNext(Left);
@@ -133,14 +93,12 @@ namespace Snake.UnitTests
         [InlineData(1, 1, 2, Down)]
         [InlineData(0, 0, 2, Left)]
         [InlineData(1, 1, 2, Right)]
-        public void WhenSnakeMovesOffStage_GameShouldBeOver(int initialX, int initialY, int stageSize, Direction initialDirection)
+        public void WhenSnakeMovesOffStage_GameShouldBeOver(int initialX, int initialY,
+            int stageSize, Direction initialDirection)
         {
             var time = new Subject<long>();
-            var stage = CreateStage(
-                time: time,
-                stageSize: stageSize,
-                initialPosition: (initialX, initialY),
-                initialDirection: initialDirection);
+            var stage = CreateStage(time: time, stageSize: stageSize,
+                initialPosition: (initialX, initialY), initialDirection: initialDirection);
 
             time.OnNext(1);
 
@@ -148,7 +106,7 @@ namespace Snake.UnitTests
         }
 
         [Fact]
-        public void WhenSnakeEatsFood_SnakeShouldGrow()
+        public void WhenSnakeMovesToPositionOfFood_SnakeShouldGrow()
         {
             var time = new Subject<long>();
             var foodPositions = new FakeFoodPositioningService((2, 3), (5, 2));
