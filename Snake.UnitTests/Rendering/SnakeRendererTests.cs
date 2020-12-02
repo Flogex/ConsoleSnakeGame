@@ -54,7 +54,7 @@ namespace Snake.UnitTests.Rendering
 
             _sut.RenderNext(snake);
 
-            _console.PositionsSet((3, 3), (4, 3), (4, 4), (3, 4)).Should().BeTrue();
+            _console.ArePositionsSet((3, 3), (4, 3), (4, 4), (3, 4)).Should().BeTrue();
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace Snake.UnitTests.Rendering
             var nextSnake = initialSnake.Move(Up);
             _sut.RenderNext(nextSnake);
 
-            _console.PositionsSet((3, 2), (3, 3), (4, 3), (4, 4)).Should().BeTrue();
+            _console.ArePositionsSet((3, 2), (3, 3), (4, 3), (4, 4)).Should().BeTrue();
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace Snake.UnitTests.Rendering
             var nextSnake = initialSnake.Move(Up);
             _sut.RenderNext(nextSnake);
 
-            _console.PositionsSet((3, 4)).Should().BeFalse();
+            _console.ArePositionsSet((3, 4)).Should().BeFalse();
         }
     }
 }

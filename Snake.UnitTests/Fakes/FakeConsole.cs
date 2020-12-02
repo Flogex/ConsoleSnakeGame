@@ -64,7 +64,7 @@ namespace Snake.UnitTests.Fakes
             _cursorPosition = (nextRow, nextColumn);
         }
 
-        public bool PositionsSet(params Position[] positions) =>
+        public bool ArePositionsSet(params Position[] positions) =>
             positions.All(p => this.Output[p.Y, p.X] != default);
     }
 
