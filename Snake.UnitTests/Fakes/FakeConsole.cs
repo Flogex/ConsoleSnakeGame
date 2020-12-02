@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using Snake.GameObjects;
+using Snake.Rendering;
 
 namespace Snake.UnitTests.Fakes
 {

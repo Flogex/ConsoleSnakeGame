@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using FluentAssertions;
+using Snake.GameObjects;
 using Snake.UnitTests.Fakes;
 using Xunit;
 using static Snake.Direction;

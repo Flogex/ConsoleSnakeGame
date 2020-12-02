@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Xunit;
 
-namespace Snake.UnitTests
+namespace Snake.UnitTests.GameObjects
 {
     public partial class SnakeTests
     {

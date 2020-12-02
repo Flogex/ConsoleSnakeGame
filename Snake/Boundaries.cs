@@ -1,4 +1,5 @@
 ﻿using System;
+using Snake.GameObjects;
 
 namespace Snake
 {

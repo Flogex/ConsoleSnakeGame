@@ -1,10 +1,12 @@
 ﻿using System;
 using FluentAssertions;
+using Snake.GameObjects;
+using Snake.Rendering;
 using Snake.UnitTests.Fakes;
 using Xunit;
 using static Snake.Direction;
 
-namespace Snake.UnitTests
+namespace Snake.UnitTests.Rendering
 {
     public class SnakeRendererTests
     {

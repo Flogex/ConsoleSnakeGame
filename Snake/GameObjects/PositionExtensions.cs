@@ -1,7 +1,7 @@
 ﻿using System;
 using static Snake.Direction;
 
-namespace Snake
+namespace Snake.GameObjects
 {
     public static class PositionExtensions
     {
@@ -9,10 +9,10 @@ namespace Snake
         {
             return direction switch
             {
-                Left  => (pos.X - 1, pos.Y),
+                Left => (pos.X - 1, pos.Y),
                 Right => (pos.X + 1, pos.Y),
-                Up    => (pos.X, pos.Y - 1),
-                Down  => (pos.X, pos.Y + 1),
+                Up => (pos.X, pos.Y - 1),
+                Down => (pos.X, pos.Y + 1),
                 _ => throw new NotSupportedException("Unknown direction")
             };
         }

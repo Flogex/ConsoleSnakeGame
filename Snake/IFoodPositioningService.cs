@@ -1,4 +1,6 @@
-﻿namespace Snake
+﻿using Snake.GameObjects;
+
+namespace Snake
 {
     public interface IFoodPositioningService
     {

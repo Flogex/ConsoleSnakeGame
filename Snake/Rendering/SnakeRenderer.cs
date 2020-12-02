@@ -1,4 +1,4 @@
-﻿namespace Snake
+﻿namespace Snake.Rendering
 {
     public class SnakeRenderer
     {
