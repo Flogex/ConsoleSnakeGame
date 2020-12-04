@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Snake.GameObjects;
+using Snake.UnitTests.Helpers;
 using Xunit;
 using static Snake.Direction;
 

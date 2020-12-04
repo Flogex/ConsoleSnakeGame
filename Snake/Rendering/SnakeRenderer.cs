@@ -1,6 +1,6 @@
 ﻿namespace Snake.Rendering
 {
-    public class SnakeRenderer
+    internal class SnakeRenderer
     {
         private readonly IConsole _console;
 

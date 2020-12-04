@@ -4,7 +4,7 @@ using Snake.GameObjects;
 
 namespace Snake
 {
-    public class Stage
+    public class Stage : IStage
     {
         private readonly IDisposable _timeSubscription;
         private readonly IDisposable _directionStreamSubscription;
@@ -35,7 +35,7 @@ namespace Snake
 
         public Direction CurrentDirection { get; private set; }
 
-        public Position CurrentFoodPosition { get; set; }
+        public Position CurrentFoodPosition { get; private set; }
 
         public bool GameOver { get; private set; }
 

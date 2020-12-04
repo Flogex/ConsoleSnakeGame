@@ -2,7 +2,7 @@
 
 namespace Snake.Rendering
 {
-    public class FoodRenderer
+    internal class FoodRenderer
     {
         private readonly IConsole _console;
         private Position? _lastFoodPosition;

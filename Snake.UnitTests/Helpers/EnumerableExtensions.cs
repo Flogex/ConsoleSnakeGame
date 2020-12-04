@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Snake.UnitTests
+namespace Snake.UnitTests.Helpers
 {
-    internal static class Helper
+    internal static class EnumerableExtensions
     {
         public static IEnumerable<(T First, T Second)> CombineDistinctPairs<T>(this IEnumerable<T> source)
         {
