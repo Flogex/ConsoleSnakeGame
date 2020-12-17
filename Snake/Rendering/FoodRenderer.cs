@@ -12,19 +12,17 @@ namespace Snake.Rendering
             _console = console;
         }
 
-        public void RenderNext(Position foodPosition)
+        public void RenderNext(Position nextFoodPosition)
         {
             if (_lastFoodPosition.HasValue)
             {
                 var lastFoodPosition = _lastFoodPosition.Value;
-                _console.SetCursorPosition(lastFoodPosition.Y, lastFoodPosition.X);
-                _console.RemoveCurrentChar();
+                _console.RemoveCharAt(lastFoodPosition.Y, lastFoodPosition.X);
             }
 
-            _console.SetCursorPosition(foodPosition.Y, foodPosition.X);
-            _console.Write('F');
+            _console.WriteAt('F', nextFoodPosition.Y, nextFoodPosition.X);
 
-            _lastFoodPosition = foodPosition;
+            _lastFoodPosition = nextFoodPosition;
         }
     }
 }
