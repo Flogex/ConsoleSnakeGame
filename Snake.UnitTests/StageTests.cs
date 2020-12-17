@@ -193,5 +193,18 @@ namespace Snake.UnitTests
 
             stage.GameOver.Should().BeFalse();
         }
+
+        [Fact]
+        public void WhenTimeElapsed_StageShouldFireStageChangedEvent()
+        {
+            var time = new Subject<long>();
+            var stage = CreateStage(time);
+
+            using var monitor = stage.Monitor();
+
+            time.OnNext(1);
+
+            monitor.Should().Raise(nameof(Stage.StageChangedEvent)).WithSender(stage);
+        }
     }
 }

@@ -39,6 +39,8 @@ namespace Snake
 
         public bool GameOver { get; private set; }
 
+        public event EventHandler StageChangedEvent;
+
         private void HandleTimeElapsed()
         {
             this.Snake = this.Snake.Move(this.CurrentDirection);
@@ -54,6 +56,8 @@ namespace Snake
                 this.Snake = this.Snake.Eat();
                 this.CurrentFoodPosition = _foodPositions.GetNextPosition(this.Boundaries, this.Snake);
             }
+
+            this.StageChangedEvent?.Invoke(this, EventArgs.Empty);
         }
 
         private void FinishGame()
