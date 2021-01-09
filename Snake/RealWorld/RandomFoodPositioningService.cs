@@ -15,7 +15,8 @@ namespace Snake.RealWorld
 
         public Position GetNextPosition(Boundaries boundaries, Snake snake)
         {
-            return (3, 7);
+            if (snake.Length == (boundaries.MaxX + 1) * (boundaries.MaxY + 1))
+                throw new InvalidOperationException("There is no place for new food.");
 
             (int, int) position;
 
