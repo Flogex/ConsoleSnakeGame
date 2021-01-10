@@ -11,8 +11,8 @@ namespace Snake.UnitTests.Rendering
         private readonly StageRenderer _sut;
         private readonly Boundaries _boundaries;
 
-        private readonly Snake _bogusSnake;
-        private readonly Position _bogusFood;
+        private readonly Snake _dummySnake;
+        private readonly Position _dummyFood;
 
         public StageRendererTests()
         {
@@ -20,8 +20,8 @@ namespace Snake.UnitTests.Rendering
             _sut = new StageRenderer(_console);
             _boundaries = new Boundaries(10);
 
-            _bogusSnake = CreateSnakeAtPositions((8, 8));
-            _bogusFood = new Position(7, 5);
+            _dummySnake = CreateSnakeAtPositions((8, 8));
+            _dummyFood = new Position(7, 5);
         }
     }
 }

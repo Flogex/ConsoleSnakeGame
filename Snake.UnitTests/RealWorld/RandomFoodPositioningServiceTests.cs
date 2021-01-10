@@ -38,7 +38,7 @@ namespace Snake.UnitTests.RealWorld
         }
 
         [Fact]
-        public void WhenSnakeFillsGameBoardCompletely_InvalidOperationExceptionShouldBeThrown()
+        public void WhenSnakeFillsGameBoardCompletely_ThenInvalidOperationExceptionShouldBeThrown()
         {
             var boundaries = new Boundaries(2);
             var snake = new Snake(0, 0)

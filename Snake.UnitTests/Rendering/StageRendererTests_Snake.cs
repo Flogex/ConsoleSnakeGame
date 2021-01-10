@@ -14,7 +14,7 @@ namespace Snake.UnitTests.Rendering
             {
                 Snake = snake,
                 Boundaries = _boundaries,
-                CurrentFoodPosition = _bogusFood
+                CurrentFoodPosition = _dummyFood
             };
         }
 
