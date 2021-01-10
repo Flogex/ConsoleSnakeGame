@@ -14,6 +14,9 @@ namespace Snake.Rendering
 
         public void RenderNext(Position nextFoodPosition)
         {
+            if (_lastFoodPosition == nextFoodPosition)
+                return;
+
             if (_lastFoodPosition.HasValue)
             {
                 var lastFoodPosition = _lastFoodPosition.Value;
