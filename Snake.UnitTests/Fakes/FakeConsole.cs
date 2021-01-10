@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Snake.GameObjects;
 using Snake.Rendering;
 
@@ -62,5 +63,17 @@ namespace Snake.UnitTests.Fakes
 
         public bool ArePositionsSet(params Position[] positions) =>
             positions.All(p => this.Output[p.Y, p.X] != default);
+
+        public IEnumerable<Position> GetSetPositions()
+        {
+            for (var row = 0; row < this.Output.GetLength(0); row++)
+            {
+                for (var column = 0; column < this.Output.GetLength(1); column++)
+                {
+                    if (this.Output[row, column] != default)
+                        yield return new Position(column, row);
+                }
+            }
+        }
     }
 }

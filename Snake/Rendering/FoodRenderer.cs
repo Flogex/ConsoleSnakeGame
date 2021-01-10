@@ -4,6 +4,8 @@ namespace Snake.Rendering
 {
     internal class FoodRenderer
     {
+        private const char _foodSymbol = 'F';
+
         private readonly IConsole _console;
         private Position? _lastFoodPosition;
 
@@ -23,7 +25,7 @@ namespace Snake.Rendering
                 _console.RemoveCharAt(lastFoodPosition.Y, lastFoodPosition.X);
             }
 
-            _console.WriteAt('F', nextFoodPosition.Y, nextFoodPosition.X);
+            _console.WriteAt(_foodSymbol, nextFoodPosition.Y, nextFoodPosition.X);
 
             _lastFoodPosition = nextFoodPosition;
         }

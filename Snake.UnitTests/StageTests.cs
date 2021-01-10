@@ -139,6 +139,22 @@ namespace Snake.UnitTests
         }
 
         [Fact]
+        public void WhenSnakeEatsFood_ThenSnakeTailShouldGrowToPreviousPosition()
+        {
+            var time = new Subject<long>();
+            var foodPositions = new FakeFoodPositioningService((2, 3), (5, 2));
+            var stage = CreateStage(
+                time: time,
+                foodPositions: foodPositions,
+                initialPosition: (2, 2),
+                initialDirection: Down);
+
+            time.OnNext(1);
+
+            stage.Snake.Body.Should().Equal((2, 3), (2, 2));
+        }
+
+        [Fact]
         public void WhenSnakeEatsItself_ThenGameShouldBeOver()
         {
             var time = new Subject<long>();
