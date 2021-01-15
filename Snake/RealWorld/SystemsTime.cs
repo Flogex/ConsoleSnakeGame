@@ -6,6 +6,6 @@ namespace Snake.RealWorld
     public static class SystemsTime
     {
         public static IObservable<long> Create() =>
-            Observable.Interval(TimeSpan.FromSeconds(1));
+            Observable.Interval(TimeSpan.FromMilliseconds(200));
     }
 }

@@ -8,6 +8,7 @@ namespace Snake.RealWorld
         public SystemsConsole()
         {
             Console.CursorVisible = false;
+            Console.Title = "Snaky";
         }
 
         public int Width => Console.WindowWidth;
