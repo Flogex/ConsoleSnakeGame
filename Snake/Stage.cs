@@ -14,12 +14,12 @@ namespace Snake
             IObservable<long> time,
             IObservable<Direction> directionStream,
             IFoodPositioningService foodPositions, //TODO Food must be far enough from head, in bounds, not at position where tail is, reachable
-            int size,
+            Boundaries boundaries,
             Position initialSnakePosition,
             Direction initialDirection)
         {
             this.Snake = new Snake(initialSnakePosition);
-            this.Boundaries = new Boundaries(size);
+            this.Boundaries = boundaries;
             this.CurrentDirection = initialDirection;
 
             _foodPositions = foodPositions;

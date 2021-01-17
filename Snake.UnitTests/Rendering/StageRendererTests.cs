@@ -18,7 +18,7 @@ namespace Snake.UnitTests.Rendering
         {
             _console = new FakeConsole(10, 10);
             _sut = new StageRenderer(_console);
-            _boundaries = new Boundaries(10);
+            _boundaries = new Boundaries(_console.Height, _console.Width);
 
             _dummySnake = CreateSnakeAtPositions((8, 8));
             _dummyFood = new Position(7, 5);

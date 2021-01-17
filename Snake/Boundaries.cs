@@ -5,12 +5,12 @@ namespace Snake
 {
     public readonly struct Boundaries : IEquatable<Boundaries>
     {
-        public Boundaries(int size)
+        public Boundaries(int height, int width)
         {
             this.MinX = 0;
-            this.MaxX = size - 1;
+            this.MaxX = width - 1;
             this.MinY = 0;
-            this.MaxY = size - 1;
+            this.MaxY = height - 1;
         }
 
         public int MinX { get; }

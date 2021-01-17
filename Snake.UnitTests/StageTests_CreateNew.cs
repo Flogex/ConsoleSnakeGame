@@ -28,7 +28,7 @@ namespace Snake.UnitTests
             public void ThenBoundariesArePassed()
             {
                 var stage = CreateStage(stageSize: 4);
-                stage.Boundaries.Should().Be(new Boundaries(4));
+                stage.Boundaries.Should().Be(new Boundaries(4, 4));
             }
 
             [Fact]

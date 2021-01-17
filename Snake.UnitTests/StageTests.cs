@@ -23,7 +23,7 @@ namespace Snake.UnitTests
                 time ?? Observable.Empty<long>(),
                 directions ?? Observable.Empty<Direction>(),
                 foodPositions ?? new FakeFoodPositioningService((8, 8)),
-                stageSize,
+                new Boundaries(stageSize, stageSize),
                 initialPosition ?? (3, 3),
                 initialDirection);
         }

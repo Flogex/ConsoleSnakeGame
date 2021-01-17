@@ -16,7 +16,7 @@ namespace Snake.UnitTests.RealWorld
         [Property]
         public void FoodPositionShouldBeInBoundaries()
         {
-            var boundaries = new Boundaries(4);
+            var boundaries = new Boundaries(4, 4);
             var position = _sut.GetNextPosition(boundaries, _dummySnake);
             boundaries.IsOutOfBounds(position).Should().BeFalse();
         }
@@ -24,7 +24,7 @@ namespace Snake.UnitTests.RealWorld
         [Property]
         public void FoodPositionShouldNotCollideWithSnake()
         {
-            var boundaries = new Boundaries(5);
+            var boundaries = new Boundaries(5, 5);
             var snake = new Snake(3, 3)
                 .Move(Left).Eat()
                 .Move(Up).Eat();
@@ -40,7 +40,7 @@ namespace Snake.UnitTests.RealWorld
         [Fact]
         public void WhenSnakeFillsGameBoardCompletely_ThenInvalidOperationExceptionShouldBeThrown()
         {
-            var boundaries = new Boundaries(2);
+            var boundaries = new Boundaries(2, 2);
             var snake = new Snake(0, 0)
                 .Move(Right).Eat()
                 .Move(Down).Eat()
