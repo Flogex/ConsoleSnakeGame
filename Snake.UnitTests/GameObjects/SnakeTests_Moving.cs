@@ -29,7 +29,7 @@ namespace Snake.UnitTests.GameObjects
             }
 
             // ∀s ∈ Snakes ∀d1,d2 ∈ Direction: s.Length == 1 ⇒
-            //     s.Move(d1).Move(d2) == s.Move(d2).Move(d1);
+            // s.Move(d1).Move(d2) == s.Move(d2).Move(d1);
             [Theory]
             [MemberData(nameof(GetDirectionCombinations))]
             public void ThenOperationShouldBeCommutative(Direction d1, Direction d2)
@@ -42,11 +42,10 @@ namespace Snake.UnitTests.GameObjects
                 snake1.Should().Be(snake2);
             }
 
-            public static IEnumerable<object[]> GetDirectionCombinations()
+            public static TheoryData<Direction, Direction> GetDirectionCombinations()
             {
-                return Enum.GetValues<Direction>()
-                    .CombineDistinctPairs()
-                    .Select(p => new object[] { p.First, p.Second });
+                var combinations = Enum.GetValues<Direction>().CombineDistinctPairs();
+                return new TheoryData<Direction, Direction>().Fill(combinations);
             }
 
             [Fact]
@@ -141,30 +140,28 @@ namespace Snake.UnitTests.GameObjects
                 snake.Body.Should().Equal(expectedPartPositions);
             }
 
-            public static IEnumerable<object[]> MoveSnakeWithLength3BySequenceTestData()
+            public static TheoryData<Direction[], Position[]> MoveSnakeWithLength3BySequenceTestData()
             {
                 // Given: Snake with parts at positions [(4, 6), (4, 5), (5, 5)]
-                var testData = new[]
+                return new TheoryData<Direction[], Position[]>
                 {
-                    (
-                        Sequence: new[] { Down },
-                        ExpectedPartPositions: new Position[] { (4, 7), (4, 6), (4, 5) }
-                    ),
-                    (
-                        Sequence: new[] { Right, Up },
-                        ExpectedPartPositions: new Position[] { (5, 5), (5, 6), (4, 6) }
-                    ),
-                    (
-                        Sequence: new[] { Left, Left, Left },
-                        ExpectedPartPositions: new Position[] { (1, 6), (2, 6), (3, 6) }
-                    ),
-                    (
-                        Sequence: new[] { Right, Down, Left, Down },
-                        ExpectedPartPositions: new Position[] { (4, 8), (4, 7), (5, 7) }
-                    )
+                    {
+                        new[] { Down }, // Directions to move in
+                        new Position[] { (4, 7), (4, 6), (4, 5) } // Expected end positions of parts
+                    },
+                    {
+                        new[] { Right, Up },
+                        new Position[] { (5, 5), (5, 6), (4, 6) }
+                    },
+                    {
+                        new[] { Left, Left, Left },
+                        new Position[] { (1, 6), (2, 6), (3, 6) }
+                    },
+                    {
+                        new[] { Right, Down, Left, Down },
+                        new Position[] { (4, 8), (4, 7), (5, 7) }
+                    }
                 };
-
-                return testData.Select(data => new object[] { data.Sequence, data.ExpectedPartPositions });
             }
 
             [Theory]
@@ -186,30 +183,28 @@ namespace Snake.UnitTests.GameObjects
                 snake.Body.Should().Equal(expectedPartPositions);
             }
 
-            public static IEnumerable<object[]> MoveSnakeWithLength5BySequenceTestData()
+            public static TheoryData<Direction[], Position[]> MoveSnakeWithLength5BySequenceTestData()
             {
                 // Given: Snake with parts at positions [(3, 7), (4, 7), (4, 6), (4, 5), (5, 5)]
-                var testData = new[]
+                return new TheoryData<Direction[], Position[]>
                 {
-                    (
-                        Sequence: new[] { Down },
-                        ExpectedPartPositions: new Position[] { (3, 8), (3, 7), (4, 7), (4, 6), (4, 5) }
-                    ),
-                    (
-                        Sequence: new[] { Up, Up },
-                        ExpectedPartPositions: new Position[] { (3, 5), (3, 6), (3, 7), (4, 7), (4, 6) }
-                    ),
-                    (
-                        Sequence: new[] { Left, Left, Left },
-                        ExpectedPartPositions: new Position[] { (0, 7), (1, 7), (2, 7), (3, 7), (4, 7) }
-                    ),
-                    (
-                        Sequence: new[] { Down, Right, Right, Up },
-                        ExpectedPartPositions: new Position[] { (5, 7), (5, 8), (4, 8), (3, 8), (3, 7) }
-                    )
+                    {
+                        new[] { Down }, // Directions to move in
+                        new Position[] { (3, 8), (3, 7), (4, 7), (4, 6), (4, 5) } // Expected end positions of parts
+                    },
+                    {
+                        new[] { Up, Up },
+                        new Position[] { (3, 5), (3, 6), (3, 7), (4, 7), (4, 6) }
+                    },
+                    {
+                        new[] { Left, Left, Left },
+                        new Position[] { (0, 7), (1, 7), (2, 7), (3, 7), (4, 7) }
+                    },
+                    {
+                        new[] { Down, Right, Right, Up },
+                        new Position[] { (5, 7), (5, 8), (4, 8), (3, 8), (3, 7) }
+                    }
                 };
-
-                return testData.Select(data => new object[] { data.Sequence, data.ExpectedPartPositions });
             }
         }
     }
