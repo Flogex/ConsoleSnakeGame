@@ -6,11 +6,11 @@ namespace Snake.RealWorld
 {
     public class RandomFoodPositioningService : IFoodPositioningService
     {
-        private readonly Random _random;
+        private readonly System.Random _random;
 
         public RandomFoodPositioningService()
         {
-            _random = new Random();
+            _random = new System.Random();
         }
 
         public Position GetNextPosition(Boundaries boundaries, Snake snake)

@@ -14,10 +14,12 @@ namespace Snake
             var time = SystemsTime.Create();
             var directions = UserDirections.Create();
             var food = new RandomFoodPositioningService();
-            var size = Math.Min(console.Height, console.Width);
-            var initialSnakePosition = (3, 5);
-            var initialDirection = Direction.Down;
-            var stage = new Stage(time, directions, food, size, initialSnakePosition, initialDirection);
+            var boundaries = new Boundaries(console.Height, console.Width);
+            var initialSnakePosition = RandomGameObjectGenerator.GetPosition(boundaries);
+            var initialDirection = RandomGameObjectGenerator.GetDirection();
+
+            var stage = new Stage(time, directions, food, boundaries,
+                initialSnakePosition, initialDirection);
 
             var renderer = new StageRenderer(console);
 
