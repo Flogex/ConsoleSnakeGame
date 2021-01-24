@@ -19,13 +19,17 @@ namespace Snake.UnitTests
             Position? initialPosition = null,
             Direction initialDirection = Right)
         {
-            return new Stage(
+            var stage = new Stage(
                 time ?? Observable.Empty<long>(),
                 directions ?? Observable.Empty<Direction>(),
                 foodPositions ?? new FakeFoodPositioningService((8, 8)),
                 new Boundaries(stageSize, stageSize),
                 initialPosition ?? (3, 3),
                 initialDirection);
+
+            _ = stage.Start();
+
+            return stage;
         }
 
         [Fact]

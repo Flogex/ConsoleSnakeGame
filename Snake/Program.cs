@@ -5,7 +5,7 @@ using Snake.Rendering;
 
 namespace Snake
 {
-    class Program
+    public class Program
     {
         public static Task Main()
         {
@@ -29,7 +29,7 @@ namespace Snake
                     renderer.RenderNext(nextStage);
             };
 
-            return Task.Delay(10000);
+            return stage.Start();
         }
 
         private static IConsole CreateConsole()

@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Snake.GameObjects;
 
 namespace Snake
 {
     public class Stage : IStage
     {
-        private readonly IDisposable _timeSubscription;
-        private readonly IDisposable _directionStreamSubscription;
         private readonly IFoodPositioningService _foodPositions;
+
+        private readonly IObservable<long> _time;
+        private readonly IObservable<Direction> _directionStream;
+
+        private IDisposable? _timeSubscription;
+        private IDisposable? _directionStreamSubscription;
+
+        private readonly TaskCompletionSource _tcs = new TaskCompletionSource();
 
         public Stage(
             IObservable<long> time,
@@ -18,15 +25,15 @@ namespace Snake
             Position initialSnakePosition,
             Direction initialDirection)
         {
+            _time = time;
+            _directionStream = directionStream;
+
             this.Snake = new Snake(initialSnakePosition);
             this.Boundaries = boundaries;
             this.CurrentDirection = initialDirection;
 
             _foodPositions = foodPositions;
             this.CurrentFoodPosition = foodPositions.GetNextPosition(this.Boundaries, this.Snake);
-
-            _timeSubscription = time.Subscribe(_ => HandleTimeElapsed());
-            _directionStreamSubscription = directionStream.Subscribe(next => this.CurrentDirection = next);
         }
 
         public Snake Snake { get; private set; }
@@ -39,7 +46,15 @@ namespace Snake
 
         public bool GameOver { get; private set; }
 
-        public event EventHandler StageChangedEvent;
+        public event EventHandler? StageChangedEvent;
+
+        public Task Start()
+        {
+            _timeSubscription = _time.Subscribe(_ => HandleTimeElapsed());
+            _directionStreamSubscription = _directionStream.Subscribe(next => this.CurrentDirection = next);
+
+            return _tcs.Task;
+        }
 
         private void HandleTimeElapsed()
         {
@@ -63,8 +78,9 @@ namespace Snake
         private void FinishGame()
         {
             this.GameOver = true;
-            _timeSubscription.Dispose();
-            _directionStreamSubscription.Dispose();
+            _timeSubscription!.Dispose();
+            _directionStreamSubscription!.Dispose();
+            _tcs.SetResult();
         }
     }
 }
