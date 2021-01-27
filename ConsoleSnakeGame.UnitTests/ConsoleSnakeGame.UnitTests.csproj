@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Snake\ConsoleSnakeGame.csproj" />
+    <ProjectReference Include="..\ConsoleSnakeGame\ConsoleSnakeGame.csproj" />
   </ItemGroup>
 
 </Project>
