@@ -1,6 +1,6 @@
-﻿using Snake.GameObjects;
+﻿using ConsoleSnakeGame.GameObjects;
 
-namespace Snake.Rendering
+namespace ConsoleSnakeGame.Rendering
 {
     internal class FoodRenderer
     {

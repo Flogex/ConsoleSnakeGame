@@ -1,9 +1,10 @@
-﻿using Snake.GameObjects;
-using Snake.Rendering;
-using Snake.UnitTests.Fakes;
-using static Snake.UnitTests.Helpers.SnakeGenerator;
+﻿using ConsoleSnakeGame.Gameplay;
+using ConsoleSnakeGame.GameObjects;
+using ConsoleSnakeGame.Rendering;
+using ConsoleSnakeGame.UnitTests.Fakes;
+using static ConsoleSnakeGame.UnitTests.Helpers.SnakeGenerator;
 
-namespace Snake.UnitTests.Rendering
+namespace ConsoleSnakeGame.UnitTests.Rendering
 {
     public partial class StageRendererTests
     {

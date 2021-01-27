@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Snake.GameObjects;
-using Snake.UnitTests.Helpers;
+using ConsoleSnakeGame.GameObjects;
+using ConsoleSnakeGame.UnitTests.Helpers;
 using Xunit;
-using static Snake.Direction;
+using static ConsoleSnakeGame.GameObjects.Direction;
 
-namespace Snake.UnitTests.GameObjects
+namespace ConsoleSnakeGame.UnitTests.GameObjects
 {
     public partial class SnakeTests
     {

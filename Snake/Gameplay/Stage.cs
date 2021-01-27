@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Snake.GameObjects;
+using ConsoleSnakeGame.GameObjects;
+using ConsoleSnakeGame.Ports;
 
-namespace Snake
+namespace ConsoleSnakeGame.Gameplay
 {
     public class Stage : IStage
     {
-        private readonly IFoodPositioningService _foodPositions;
+        private readonly IFoodPositionProvider _foodPositions;
 
         private readonly IObservable<long> _time;
         private readonly IObservable<Direction> _directionStream;
@@ -20,20 +20,19 @@ namespace Snake
         public Stage(
             IObservable<long> time,
             IObservable<Direction> directionStream,
-            IFoodPositioningService foodPositions, //TODO Food must be far enough from head, in bounds, not at position where tail is, reachable
+            IFoodPositionProvider foodPositions, //TODO Food must be far enough from head, in bounds, not at position where tail is, reachable
             Boundaries boundaries,
-            Position initialSnakePosition,
-            Direction initialDirection)
+            InitialSnakeState initialSnakeState)
         {
             _time = time;
             _directionStream = directionStream;
 
-            this.Snake = new Snake(initialSnakePosition);
-            this.Boundaries = boundaries;
-            this.CurrentDirection = initialDirection;
+            Boundaries = boundaries;
+            Snake = new Snake(initialSnakeState.HeadPosition);
+            CurrentDirection = initialSnakeState.Direction;
 
             _foodPositions = foodPositions;
-            this.CurrentFoodPosition = foodPositions.GetNextPosition(this.Boundaries, this.Snake);
+            CurrentFoodPosition = foodPositions.GetNextPosition(Boundaries, Snake);
         }
 
         public Snake Snake { get; private set; }
@@ -51,33 +50,30 @@ namespace Snake
         public Task Start()
         {
             _timeSubscription = _time.Subscribe(_ => HandleTimeElapsed());
-            _directionStreamSubscription = _directionStream.Subscribe(next => this.CurrentDirection = next);
+            _directionStreamSubscription = _directionStream.Subscribe(next => CurrentDirection = next);
 
             return _tcs.Task;
         }
 
         private void HandleTimeElapsed()
         {
-            this.Snake = this.Snake.Move(this.CurrentDirection);
+            Snake = Snake.Move(CurrentDirection);
 
-            if (this.Boundaries.IsOutOfBounds(this.Snake.Head))
+            if (Referee.HasPlayerLost(Snake, (Boundaries)Boundaries))
                 FinishGame();
 
-            if (this.Snake.Body.Skip(1).Contains(this.Snake.Head))
-                FinishGame();
-
-            if (this.Snake.Head == this.CurrentFoodPosition)
+            if (Snake.Head == CurrentFoodPosition)
             {
-                this.Snake = this.Snake.Eat();
-                this.CurrentFoodPosition = _foodPositions.GetNextPosition(this.Boundaries, this.Snake);
+                Snake = Snake.Eat();
+                CurrentFoodPosition = _foodPositions.GetNextPosition(Boundaries, Snake);
             }
 
-            this.StageChangedEvent?.Invoke(this, EventArgs.Empty);
+            StageChangedEvent?.Invoke(this, EventArgs.Empty);
         }
 
         private void FinishGame()
         {
-            this.GameOver = true;
+            GameOver = true;
             _timeSubscription!.Dispose();
             _directionStreamSubscription!.Dispose();
             _tcs.SetResult();

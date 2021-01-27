@@ -1,11 +1,19 @@
-﻿using Snake.GameObjects;
+﻿using ConsoleSnakeGame.Gameplay;
+using ConsoleSnakeGame.GameObjects;
 using System;
 
-namespace Snake.RealWorld
+namespace ConsoleSnakeGame.RealWorld
 {
-    public static class RandomGameObjectGenerator
+    internal static class RandomGameObjectGenerator
     {
         private static readonly Random _random = new Random();
+
+        public static InitialSnakeState GetSnakeState(Boundaries boundaries)
+        {
+            var headPosition = GetPosition(boundaries);
+            var direction = GetDirection();
+            return new InitialSnakeState(headPosition, direction);
+        }
 
         public static Position GetPosition(Boundaries boundaries)
         {

@@ -1,4 +1,6 @@
-﻿namespace Snake.Rendering
+﻿using ConsoleSnakeGame.GameObjects;
+
+namespace ConsoleSnakeGame.Rendering
 {
     internal class SnakeRenderer
     {

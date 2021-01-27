@@ -1,9 +1,10 @@
 ﻿using FluentAssertions;
 using FsCheck.Xunit;
-using Snake.RealWorld;
+using ConsoleSnakeGame.Gameplay;
+using ConsoleSnakeGame.RealWorld;
 using System;
 
-namespace Snake.UnitTests.RealWorld
+namespace ConsoleSnakeGame.UnitTests.RealWorld
 {
     public class RandomGameObjectGeneratorTests
     {

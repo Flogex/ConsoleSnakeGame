@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 
-namespace Snake.UnitTests.Helpers
+namespace ConsoleSnakeGame.UnitTests.Helpers
 {
     public static class TheoryDataExtensions
     {

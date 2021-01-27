@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Snake.Rendering
+namespace ConsoleSnakeGame.Rendering
 {
     public readonly struct CursorPosition : IEquatable<CursorPosition>
     {

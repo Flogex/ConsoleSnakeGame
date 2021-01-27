@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Snake.UnitTests.Helpers
+namespace ConsoleSnakeGame.UnitTests.Helpers
 {
     internal static class EnumerableExtensions
     {

@@ -1,10 +1,11 @@
 ﻿using FluentAssertions;
-using Snake.GameObjects;
-using Snake.UnitTests.Fakes;
+using ConsoleSnakeGame.Gameplay;
+using ConsoleSnakeGame.GameObjects;
+using ConsoleSnakeGame.UnitTests.Fakes;
 using Xunit;
-using static Snake.Direction;
+using static ConsoleSnakeGame.GameObjects.Direction;
 
-namespace Snake.UnitTests
+namespace ConsoleSnakeGame.UnitTests
 {
     public partial class StageTests
     {
@@ -34,7 +35,7 @@ namespace Snake.UnitTests
             [Fact]
             public void ThenFoodShouldBeOnPositionProvidedByPositioningService()
             {
-                var foodPositions = new FakeFoodPositioningService((3, 3));
+                var foodPositions = new FakeFoodPositionProvider((3, 3));
                 var stage = CreateStage(foodPositions: foodPositions);
 
                 stage.CurrentFoodPosition.Should().Be(new Position(3, 3));

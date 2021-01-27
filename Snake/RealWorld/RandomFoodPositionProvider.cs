@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Linq;
-using Snake.GameObjects;
+using ConsoleSnakeGame.Gameplay;
+using ConsoleSnakeGame.GameObjects;
+using ConsoleSnakeGame.Ports;
 
-namespace Snake.RealWorld
+namespace ConsoleSnakeGame.RealWorld
 {
-    public class RandomFoodPositioningService : IFoodPositioningService
+    internal class RandomFoodPositionProvider : IFoodPositionProvider
     {
-        private readonly System.Random _random;
+        private readonly Random _random;
 
-        public RandomFoodPositioningService()
+        public RandomFoodPositionProvider()
         {
-            _random = new System.Random();
+            _random = new Random();
         }
 
         public Position GetNextPosition(Boundaries boundaries, Snake snake)

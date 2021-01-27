@@ -1,8 +1,8 @@
 ﻿using System;
-using Snake.GameObjects;
-using static Snake.Direction;
+using ConsoleSnakeGame.GameObjects;
+using static ConsoleSnakeGame.GameObjects.Direction;
 
-namespace Snake.UnitTests.Helpers
+namespace ConsoleSnakeGame.UnitTests.Helpers
 {
     internal static class SnakeGenerator
     {

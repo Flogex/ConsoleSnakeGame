@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
-using Snake.GameObjects;
-using Snake.UnitTests.Fakes;
+using ConsoleSnakeGame.GameObjects;
+using ConsoleSnakeGame.UnitTests.Fakes;
 using Xunit;
-using static Snake.Direction;
-using static Snake.UnitTests.Helpers.SnakeGenerator;
+using static ConsoleSnakeGame.GameObjects.Direction;
+using static ConsoleSnakeGame.UnitTests.Helpers.SnakeGenerator;
 
-namespace Snake.UnitTests.Rendering
+namespace ConsoleSnakeGame.UnitTests.Rendering
 {
     public partial class StageRendererTests
     {

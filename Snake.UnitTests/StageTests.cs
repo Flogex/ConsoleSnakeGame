@@ -2,30 +2,35 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using FluentAssertions;
-using Snake.GameObjects;
-using Snake.UnitTests.Fakes;
+using ConsoleSnakeGame.Gameplay;
+using ConsoleSnakeGame.GameObjects;
+using ConsoleSnakeGame.Ports;
+using ConsoleSnakeGame.UnitTests.Fakes;
 using Xunit;
-using static Snake.Direction;
+using static ConsoleSnakeGame.GameObjects.Direction;
 
-namespace Snake.UnitTests
+namespace ConsoleSnakeGame.UnitTests
 {
     public partial class StageTests
     {
         private static Stage CreateStage(
             IObservable<long> time = null,
             IObservable<Direction> directions = null,
-            IFoodPositioningService foodPositions = null,
+            IFoodPositionProvider foodPositions = null,
             int stageSize = 10,
             Position? initialPosition = null,
             Direction initialDirection = Right)
         {
+            var snakeState = new InitialSnakeState(
+                initialPosition ?? (3, 3),
+                initialDirection);
+
             var stage = new Stage(
                 time ?? Observable.Empty<long>(),
                 directions ?? Observable.Empty<Direction>(),
-                foodPositions ?? new FakeFoodPositioningService((8, 8)),
+                foodPositions ?? new FakeFoodPositionProvider((8, 8)),
                 new Boundaries(stageSize, stageSize),
-                initialPosition ?? (3, 3),
-                initialDirection);
+                snakeState);
 
             _ = stage.Start();
 
@@ -114,7 +119,7 @@ namespace Snake.UnitTests
         public void WhenSnakeMovesToPositionOfFood_ThenSnakeShouldGrow()
         {
             var time = new Subject<long>();
-            var foodPositions = new FakeFoodPositioningService((2, 3), (5, 2));
+            var foodPositions = new FakeFoodPositionProvider((2, 3), (5, 2));
             var stage = CreateStage(
                 time: time,
                 foodPositions: foodPositions,
@@ -130,7 +135,7 @@ namespace Snake.UnitTests
         public void WhenSnakeEatsFood_ThenFoodShouldAppearAtNextPosition()
         {
             var time = new Subject<long>();
-            var foodPositions = new FakeFoodPositioningService((2, 3), (5, 2));
+            var foodPositions = new FakeFoodPositionProvider((2, 3), (5, 2));
             var stage = CreateStage(
                 time: time,
                 foodPositions: foodPositions,
@@ -146,7 +151,7 @@ namespace Snake.UnitTests
         public void WhenSnakeEatsFood_ThenSnakeTailShouldGrowToPreviousPosition()
         {
             var time = new Subject<long>();
-            var foodPositions = new FakeFoodPositioningService((2, 3), (5, 2));
+            var foodPositions = new FakeFoodPositionProvider((2, 3), (5, 2));
             var stage = CreateStage(
                 time: time,
                 foodPositions: foodPositions,
@@ -163,7 +168,7 @@ namespace Snake.UnitTests
         {
             var time = new Subject<long>();
             var directions = new Subject<Direction>();
-            var foodPositions = new FakeFoodPositioningService((0, 1), (0, 2), (1, 2), (1, 1), (9, 9));
+            var foodPositions = new FakeFoodPositionProvider((0, 1), (0, 2), (1, 2), (1, 1), (9, 9));
             var stage = CreateStage(
                 time: time,
                 directions: directions,
@@ -188,7 +193,7 @@ namespace Snake.UnitTests
         {
             var time = new Subject<long>();
             var directions = new Subject<Direction>();
-            var foodPositions = new FakeFoodPositioningService((0, 1), (1, 1), (1, 0), (9, 9));
+            var foodPositions = new FakeFoodPositionProvider((0, 1), (1, 1), (1, 0), (9, 9));
             var stage = CreateStage(
                 time: time,
                 directions: directions,

@@ -1,6 +1,6 @@
-﻿using Snake.GameObjects;
+﻿using ConsoleSnakeGame.GameObjects;
 
-namespace Snake
+namespace ConsoleSnakeGame.Gameplay
 {
     public interface IStage
     {

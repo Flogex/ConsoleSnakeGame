@@ -1,4 +1,6 @@
-﻿namespace Snake.Rendering
+﻿using ConsoleSnakeGame.Gameplay;
+
+namespace ConsoleSnakeGame.Rendering
 {
     public class StageRenderer
     {

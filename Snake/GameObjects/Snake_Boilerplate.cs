@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Diagnostics;
 
-namespace Snake
+namespace ConsoleSnakeGame.GameObjects
 {
     [DebuggerDisplay("Snake (Head: {this.Head}, Length: {this.Length})")]
     public readonly partial struct Snake : IEquatable<Snake>

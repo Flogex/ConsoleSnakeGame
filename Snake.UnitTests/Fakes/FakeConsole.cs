@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Snake.GameObjects;
-using Snake.Rendering;
+using ConsoleSnakeGame.GameObjects;
+using ConsoleSnakeGame.Rendering;
 
-namespace Snake.UnitTests.Fakes
+namespace ConsoleSnakeGame.UnitTests.Fakes
 {
     internal class FakeConsole : IConsole
     {

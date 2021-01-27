@@ -1,6 +1,7 @@
-﻿using Snake.GameObjects;
+﻿using ConsoleSnakeGame.Gameplay;
+using ConsoleSnakeGame.GameObjects;
 
-namespace Snake.UnitTests.Fakes
+namespace ConsoleSnakeGame.UnitTests.Fakes
 {
     internal class FakeStage : IStage
     {

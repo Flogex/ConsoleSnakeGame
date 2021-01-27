@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Snake.GameObjects;
 
-namespace Snake
+namespace ConsoleSnakeGame.GameObjects
 {
     public readonly partial struct Snake
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Snake.Rendering
+namespace ConsoleSnakeGame.Rendering
 {
     public class ConsoleShrinkDecorator : IConsole
     {

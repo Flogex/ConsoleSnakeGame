@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Snake.GameObjects;
+using ConsoleSnakeGame.Gameplay;
+using ConsoleSnakeGame.GameObjects;
+using ConsoleSnakeGame.Ports;
 
-namespace Snake.UnitTests.Fakes
+namespace ConsoleSnakeGame.UnitTests.Fakes
 {
-    internal class FakeFoodPositioningService : IFoodPositioningService
+    internal class FakeFoodPositionProvider : IFoodPositionProvider
     {
         private readonly IEnumerator<Position> _positionsEnumerator;
 
-        public FakeFoodPositioningService(params Position[] positions) : this(positions.AsEnumerable()) { }
+        public FakeFoodPositionProvider(params Position[] positions) : this(positions.AsEnumerable()) { }
 
-        public FakeFoodPositioningService(IEnumerable<Position> positions)
+        public FakeFoodPositionProvider(IEnumerable<Position> positions)
         {
             _positionsEnumerator = positions.GetEnumerator();
         }

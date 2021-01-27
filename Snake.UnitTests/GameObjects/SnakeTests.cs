@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
-using Snake.GameObjects;
+using ConsoleSnakeGame.GameObjects;
 using Xunit;
-using static Snake.Direction;
+using static ConsoleSnakeGame.GameObjects.Direction;
 
-namespace Snake.UnitTests.GameObjects
+namespace ConsoleSnakeGame.UnitTests.GameObjects
 {
     public partial class SnakeTests
     {

@@ -1,16 +1,18 @@
 ﻿using System;
 using FluentAssertions;
 using FsCheck.Xunit;
-using Snake.GameObjects;
-using Snake.RealWorld;
+using ConsoleSnakeGame.Gameplay;
+using ConsoleSnakeGame.GameObjects;
+using ConsoleSnakeGame.Ports;
+using ConsoleSnakeGame.RealWorld;
 using Xunit;
-using static Snake.Direction;
+using static ConsoleSnakeGame.GameObjects.Direction;
 
-namespace Snake.UnitTests.RealWorld
+namespace ConsoleSnakeGame.UnitTests.RealWorld
 {
     public class RandomFoodPositioningServiceTests
     {
-        private readonly IFoodPositioningService _sut = new RandomFoodPositioningService();
+        private readonly IFoodPositionProvider _sut = new RandomFoodPositionProvider();
         private readonly Snake _dummySnake = new Snake(1, 1);
 
         [Property]

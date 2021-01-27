@@ -1,59 +1,28 @@
-﻿using System;
-using System.Threading.Tasks;
-using Snake.RealWorld;
-using Snake.Rendering;
+﻿using System.Threading.Tasks;
+using ConsoleSnakeGame.Gameplay;
+using ConsoleSnakeGame.RealWorld;
+using ConsoleSnakeGame.Rendering;
 
-namespace Snake
+namespace ConsoleSnakeGame
 {
     public class Program
     {
         public static Task Main()
         {
-            var console = CreateConsole();
+            var console = ConsoleCreator.Create();
 
             var time = SystemsTime.Create();
             var directions = UserDirections.Create();
-            var food = new RandomFoodPositioningService();
+            var food = new RandomFoodPositionProvider();
             var boundaries = new Boundaries(console.Height, console.Width);
-            var initialSnakePosition = RandomGameObjectGenerator.GetPosition(boundaries);
-            var initialDirection = RandomGameObjectGenerator.GetDirection();
+            var snakeState = RandomGameObjectGenerator.GetSnakeState(boundaries);
 
-            var stage = new Stage(time, directions, food, boundaries,
-                initialSnakePosition, initialDirection);
+            var stage = new Stage(time, directions, food, boundaries, snakeState);
 
             var renderer = new StageRenderer(console);
-
-            stage.StageChangedEvent += (sender, args) =>
-            {
-                if (sender is Stage nextStage)
-                    renderer.RenderNext(nextStage);
-            };
+            StageChangedHandler.Initialize(stage, renderer);
 
             return stage.Start();
-        }
-
-        private static IConsole CreateConsole()
-        {
-            var systemsConsole = new SystemsConsole();
-            EnsureConsoleBigEnough(systemsConsole);
-
-            return
-                new ConsoleFrameDecorator(
-                    new ConsoleShrinkDecorator(
-                        Math.Min(20, systemsConsole.Width),
-                        Math.Min(20, systemsConsole.Height),
-                        systemsConsole));
-        }
-
-        private static void EnsureConsoleBigEnough(IConsole console)
-        {
-            // Needed for RandomPosition.GetNext
-
-            if (console.Height < 5)
-                throw new Exception("Console must at least have a height of 5.");
-
-            if (console.Width < 5)
-                throw new Exception("Console must at least have a width of 5.");
         }
     }
 }

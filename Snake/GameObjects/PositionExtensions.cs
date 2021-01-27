@@ -1,7 +1,7 @@
 ﻿using System;
-using static Snake.Direction;
+using static ConsoleSnakeGame.GameObjects.Direction;
 
-namespace Snake.GameObjects
+namespace ConsoleSnakeGame.GameObjects
 {
     public static class PositionExtensions
     {

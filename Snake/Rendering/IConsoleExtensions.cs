@@ -1,4 +1,4 @@
-﻿namespace Snake.Rendering
+﻿namespace ConsoleSnakeGame.Rendering
 {
     public static class IConsoleExtensions
     {

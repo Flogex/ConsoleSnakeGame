@@ -1,9 +1,9 @@
 ﻿using System;
-using Snake.Rendering;
+using ConsoleSnakeGame.Rendering;
 
-namespace Snake.RealWorld
+namespace ConsoleSnakeGame.RealWorld
 {
-    public class SystemsConsole : IConsole
+    internal class SystemsConsole : IConsole
     {
         public SystemsConsole()
         {

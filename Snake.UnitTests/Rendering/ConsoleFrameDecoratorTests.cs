@@ -1,8 +1,8 @@
 ﻿using NSubstitute;
-using Snake.Rendering;
+using ConsoleSnakeGame.Rendering;
 using Xunit;
 
-namespace Snake.UnitTests.Rendering
+namespace ConsoleSnakeGame.UnitTests.Rendering
 {
     public class ConsoleFrameDecoratorTests
     {

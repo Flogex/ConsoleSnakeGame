@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using NSubstitute;
-using Snake.Rendering;
+using ConsoleSnakeGame.Rendering;
 using System;
 using Xunit;
 
-namespace Snake.UnitTests.Rendering
+namespace ConsoleSnakeGame.UnitTests.Rendering
 {
     public class ConsoleShrinkDecoratorTests
     {

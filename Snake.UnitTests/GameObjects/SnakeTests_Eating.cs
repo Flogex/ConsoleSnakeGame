@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using FluentAssertions;
-using Snake.GameObjects;
+using ConsoleSnakeGame.GameObjects;
 using Xunit;
 
-namespace Snake.UnitTests.GameObjects
+namespace ConsoleSnakeGame.UnitTests.GameObjects
 {
     public partial class SnakeTests
     {

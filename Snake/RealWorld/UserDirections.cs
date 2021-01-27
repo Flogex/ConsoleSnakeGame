@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ConsoleSnakeGame.GameObjects;
+using System;
 using System.Reactive.Linq;
 using static System.ConsoleKey;
 
-namespace Snake.RealWorld
+namespace ConsoleSnakeGame.RealWorld
 {
-    public static class UserDirections
+    internal static class UserDirections
     {
         // https://stackoverflow.com/a/10678328
         public static IObservable<Direction> Create() =>
